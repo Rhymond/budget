@@ -26,7 +26,7 @@ dependencies:
   redux: "^3.0.0"
   flutter_redux: "^0.5.0"
   redux_logging: ^0.3.0
-  built_collection: ^4.2.2
+  redux_remote_devtools: ^0.0.4
 
 dev_dependencies:
   flutter_test:

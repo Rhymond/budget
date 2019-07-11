@@ -4,10 +4,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:budget/redux/app/app_state.dart';
 import 'package:budget/redux/expenses/expenses_state.dart';
 import 'package:budget/ui/expenses/expenses_form.dart';
-
-//import 'package:budget/redux/expenses/expenses_actions.dart';
-import 'package:budget/redux/navigation/navigation_actions.dart';
-import 'package:budget/routes.dart';
+import 'package:budget/redux/expenses/expenses_actions.dart';
+import 'package:budget/models/expense.dart';
 
 class ExpenseFormScreen extends StatelessWidget {
   const ExpenseFormScreen({Key key}) : super(key: key);
@@ -27,21 +25,32 @@ class ExpenseFormScreen extends StatelessWidget {
 
 class ExpensesFormViewModel {
   ExpensesFormViewModel({
-    @required this.onSubmitPressed,
-    @required this.state,
+    @required this.onFormSubmit,
+    @required this.onFormChanged,
+    @required this.expense,
+    @required this.formKey,
   });
 
-  final ExpensesState state;
+  final Expense expense;
+  final GlobalKey<FormState> formKey;
 
-  final Function onSubmitPressed;
+  final Function onFormSubmit;
+  final Function onFormChanged;
 
   static ExpensesFormViewModel fromStore(Store<AppState> store) {
     final state = store.state;
     final expenseState = state.expensesState;
 
     return ExpensesFormViewModel(
-      state: expenseState,
-      onSubmitPressed: () => store.dispatch(NavigatePopAction()),
+      expense: expenseState.expense,
+      formKey: expenseState.formKey,
+      onFormChanged: ({int category, int amount}) {
+        store.dispatch(ExpenseFormChanged(
+          category: category,
+          amount: amount,
+        ));
+      },
+      onFormSubmit: () => store.dispatch(SubmitExpenseForm()),
     );
   }
 }

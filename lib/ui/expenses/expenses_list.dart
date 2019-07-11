@@ -21,12 +21,12 @@ class ExpensesList extends StatelessWidget {
           Heading(title),
           ListView.builder(
             shrinkWrap: true,
-            itemCount: 3,
+            itemCount: viewModel.expenses.length,
             itemBuilder: (context, index) {
               return Card(
                 elevation: 8.0,
                 child: Container(
-                  child: Text("Card"),
+                  child: Text(viewModel.expenses[index].amount.toString()),
                 ),
               );
             },

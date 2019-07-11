@@ -3,6 +3,7 @@ import 'package:budget/ui/expenses/expenses_form_vm.dart';
 import 'package:budget/models/expenseCategory.dart';
 
 class ExpensesForm extends StatelessWidget {
+  @override
   ExpensesForm({
     Key key,
     @required this.viewModel,
@@ -35,21 +36,23 @@ class ExpensesForm extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Form(
-              key: viewModel.state.expenseForm,
+              key: viewModel.formKey,
               child: Column(
                 children: <Widget>[
                   DropdownButtonFormField(
-                    value: viewModel.state.expense.category,
+                    value: viewModel.expense.category,
                     decoration: InputDecoration(
                       labelText: "Category",
                     ),
                     items: _dropDownItems(),
+                    onChanged: (val) => viewModel.onFormChanged(category: val),
                   ),
                   SizedBox(height: 16),
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: "Amount",
                     ),
+                    initialValue: viewModel.expense.amount.toString(),
                     keyboardType: TextInputType.number,
                     validator: (String value) {
                       if (value.trim().isEmpty) {
@@ -64,14 +67,8 @@ class ExpensesForm extends StatelessWidget {
                       }
                       return null;
                     },
-                    onSaved: (val) {
-//                      int n = int.tryParse(val);
-//                      if (n == null) {
-//                        viewModel.onFormSubmit(amount: 0);
-//                      }
-//                      viewModel.onFormSubmit(amount: n);
-                    },
                     autocorrect: false,
+                    onSaved: (val) => viewModel.onFormChanged(amount: int.parse(val)),
                   ),
                   SizedBox(height: 16),
                   Container(
@@ -79,7 +76,12 @@ class ExpensesForm extends StatelessWidget {
                     height: 50,
                     child: RaisedButton(
                       elevation: 0,
-                      onPressed: viewModel.onSubmitPressed,
+                      onPressed: () {
+                        if (viewModel.formKey.currentState.validate()) {
+                          viewModel.formKey.currentState.save();
+                          viewModel.onFormSubmit();
+                        }
+                      },
                       child: Text("Submit"),
                     ),
                   ),

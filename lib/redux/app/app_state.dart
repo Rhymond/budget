@@ -25,7 +25,7 @@ class AppState {
   AppState copyWith({
     IncomeState incomeState,
     ExpensesState expensesState,
-    List<String> route
+    List<String> route,
   }) {
     return AppState(
       incomeState: incomeState ?? this.incomeState,

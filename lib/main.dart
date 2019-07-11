@@ -7,22 +7,33 @@ import 'package:budget/ui/layout/main.dart';
 import 'package:budget/widgets/route_aware_widget.dart';
 import 'package:budget/redux/navigation/navigation_middleware.dart';
 import 'package:budget/ui/expenses/expenses_form_vm.dart';
-import 'package:budget/ui/test/test.dart';
 import 'package:budget/routes.dart';
 import 'package:budget/redux/expenses/expenses_middleware.dart';
+import 'package:redux_dev_tools/redux_dev_tools.dart';
 import 'package:redux_logging/redux_logging.dart';
+import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
-void main() => runApp(App());
+void main() {
 
-class App extends StatelessWidget {
-  final store = Store<AppState>(appReducer,
+  final store = DevToolsStore<AppState>(appReducer,
       initialState: AppState.initial(),
       middleware: []
         ..addAll(createNavigationMiddleware())
         ..addAll(createExpensesMiddleware())
         ..add(LoggingMiddleware.printer()));
+
+  runApp(App(store: store));
+}
+
+class App extends StatelessWidget {
+  App({
+    Key key,
+    this.store,
+  }) : super(key: key);
+
+  final Store<AppState> store;
 
   final theme = ThemeData(
     brightness: Brightness.light,
@@ -62,8 +73,6 @@ class App extends StatelessWidget {
         return MainRoute(Layout(), settings: settings);
       case AppRoutes.addExpense:
         return MainRoute(ExpenseFormScreen(), settings: settings);
-      case AppRoutes.test:
-        return MainRoute(Test(), settings: settings);
       default:
         return MainRoute(Layout(title: 'Budget app'), settings: settings);
     }

@@ -6,31 +6,34 @@ import 'package:budget/models/expense.dart';
 class ExpensesState {
   final List<Expense> expenses;
   final Expense expense;
-  final GlobalKey<FormState> expenseForm;
-
+  final GlobalKey<FormState> formKey;
+  final TextEditingController amountController;
 
   ExpensesState({
     @required this.expenses,
     @required this.expense,
-    this.expenseForm,
+    this.formKey,
+    this.amountController,
   });
 
   factory ExpensesState.initial() {
     return new ExpensesState(
-      expenses: [],
-      expense: Expense(0, 10),
-      expenseForm: GlobalKey<FormState>(),
+      expenses: [Expense(category: 0, amount: 0)],
+      expense: Expense(category: 0, amount: 0),
+      formKey: GlobalKey<FormState>(),
+      amountController: TextEditingController(),
     );
   }
 
   ExpensesState copyWith({
     List<Expense> expenses,
     Expense expense,
-    GlobalKey<FormState> expenseForm
   }) {
     return new ExpensesState(
-      expenses: this.expenses ?? expenses,
-      expense: this.expense ?? expense,
+      expenses: expenses ?? this.expenses,
+      expense: expense ?? this.expense,
+      formKey: this.formKey,
+      amountController: this.amountController,
     );
   }
 }

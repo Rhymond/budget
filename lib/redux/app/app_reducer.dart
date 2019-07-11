@@ -5,6 +5,6 @@ import 'package:budget/redux/navigation/navigation_reducer.dart';
 
 AppState appReducer(AppState state, dynamic action) => new AppState(
       incomeState: incomeReducer(state.incomeState, action),
-      expensesState: expenseReducer(state.expensesState, action),
-      route: navigationReducer(state.route, action)
+      expensesState: expensesReducer(state.expensesState, action),
+      route: navigationReducer(state.route, action),
     );
